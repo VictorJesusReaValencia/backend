@@ -1,0 +1,11 @@
+# Ignorar node_modules
+node_modules/
+
+# Ignorar configuración de Firebase
+database/firebase_config.js
+database/firebase-key.json
+
+# Otros archivos sensibles o innecesarios
+.env
+*.log
+.DS_Store
