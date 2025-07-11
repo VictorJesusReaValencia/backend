@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
-const PeriodicosSchema = new Schema({
-  ciudad: { type: String, required: true },
+const TemasSchema = new Schema({
+  ciudad: { type: String, required: false },
   fecha_registro: { type: Date, default: Date.now },
   images: [
     {
@@ -10,21 +10,22 @@ const PeriodicosSchema = new Schema({
     }
   ],
   institucion: { type: String },
-  nombre_periodico: { type: String, required: true },
+  nombre_tema: { type: String, required: false },
   notas: { type: String },
   numero_registro: { type: Number },
-  pais: { type: String, required: true },
+  pais: { type: String, required: false },
   tomo: { type: String },
   persona_registra: { type: String },
   pdfs: [
     {
-      nombre: { type: String, required: true },
-      ruta: { type: String, required: true }
+      nombre: { type: String, required: false },
+      ruta: { type: String, required: false }
     }
   ],
+  tipoBien: {type: String},
   revisiones: [
     {
-      persona: { type: String, required: true },
+      persona: { type: String, required: false },
       fecha: { type: Date, default: Date.now },
       observacion: { type: String },
       revision_resuelta: { type: Boolean, default: false },
@@ -42,4 +43,4 @@ const PeriodicosSchema = new Schema({
   }
 });
 
-module.exports = model("Periodicos", PeriodicosSchema, "periodicos");
+module.exports = model("Temas", TemasSchema, "temas");

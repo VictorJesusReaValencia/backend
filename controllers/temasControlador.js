@@ -1,32 +1,31 @@
-const periodicos = require("../models/periodicos")
+const temas = require("../models/temas")
 const validator = require("validator")
 const fs = require("fs");
 const { constrainedMemory } = require("process");
 const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
-const Periodicos = require("../models/periodicos");
 const bucket = require("../database/firebase_config");
 
 
-const pruebaPeriodicos = (req, res) => {
+const pruebaTemas = (req, res) => {
     return res.status(200).send({
         message: "Mensaje de prueba enviado"
     });
 }
-const registrarPeriodicos = async (req,res) =>{
+const registrarTemas = async (req,res) =>{
     //Recojer parametros por post a guardar
     let parametros = req.body;
 
     try{
-        const publicacion = new periodicos(parametros)
+        const publicacion = new temas(parametros)
         const publicacionGuardada = await publicacion.save()
         return res.status(200).json({
             status : "successs",
-            mensaje: "Periodico guardado correctamente",
+            mensaje: "Tema guardado correctamente",
             publicacionGuardada
         })
 
-    }catch(erro){
+    }catch(error){
         return res.status(400).json({
             status : "error",
             mensaje: "Algo anda mal we",
@@ -48,7 +47,7 @@ const cargarFotografia = async (req, res) => {
     const urlsFirebase = [];
 
     try {
-        const doc = await periodicos.findById(id);
+        const doc = await temas.findById(id);
         if (!doc) {
             return res.status(404).json({
                 status: "error",
@@ -59,7 +58,7 @@ const cargarFotografia = async (req, res) => {
         const limpiarTexto = (texto) =>
             texto ? texto.replace(/[\/\\?%*:|"<>]/g, "").trim() : "SinNombre";
 
-        const nombrePeriodico = limpiarTexto(doc.nombre_periodico);
+        const nombreTema = limpiarTexto(doc.nombre_tema);
         const encabezado = limpiarTexto(doc.encabezado);
 
         for (let archivo of archivos) {
@@ -78,7 +77,7 @@ const cargarFotografia = async (req, res) => {
                 .toBuffer();
 
             // 🧠 Generar nombre limitado a 50 caracteres (sin contar timestamp)
-            let baseName = `Perdiodico_${nombrePeriodico}`;
+            let baseName = `Tema_${nombreTema}`;
             if (baseName.length > 50) {
                 baseName = baseName.slice(0, 50);
             }
@@ -133,7 +132,7 @@ const editarFotografia = async (req, res) => {
     const urlsFirebase = [];
 
     try {
-        const doc = await periodicos.findById(id);
+        const doc = await temas.findById(id);
         if (!doc) {
             return res.status(404).json({
                 status: "error",
@@ -144,7 +143,7 @@ const editarFotografia = async (req, res) => {
         const limpiarTexto = (texto) =>
             texto ? texto.replace(/[\/\\?%*:|"<>]/g, "").trim() : "SinNombre";
 
-        const nombrePeriodico = limpiarTexto(doc.nombre_periodico);
+        const nombreTema = limpiarTexto(doc.nombre_tema);
         const encabezado = limpiarTexto(doc.encabezado);
 
         // 🧹 Eliminar imágenes anteriores de Firebase
@@ -178,7 +177,7 @@ const editarFotografia = async (req, res) => {
                 .toBuffer();
 
             // 📛 Generar nombre truncado
-            let baseName = `Hemerografia_${nombrePeriodico}_${encabezado}`;
+            let baseName = `Tema_${nombreTema}_${encabezado}`;
             if (baseName.length > 50) {
                 baseName = baseName.slice(0, 50);
             }
@@ -220,11 +219,11 @@ const editarFotografia = async (req, res) => {
         });
     }
 };
-const borrarPeriodicos = async (req, res) => {
+const borrarTemas = async (req, res) => {
     const id = req.params.id;
 
     try {
-        let hemero = await periodicos.findOneAndDelete({ _id: id });
+        let hemero = await temas.findOneAndDelete({ _id: id });
 
         if (!hemero) {
             return res.status(404).json({
@@ -245,12 +244,12 @@ const borrarPeriodicos = async (req, res) => {
         });
     }
 };
-const editarPeriodicos = async (req, res) => {
+const editarTemas = async (req, res) => {
     const id = req.params.id;
     const datosActualizados = req.body;
 
     try {
-        let hemero = await periodicos.findByIdAndUpdate(id, datosActualizados, { new: true });
+        let hemero = await temas.findByIdAndUpdate(id, datosActualizados, { new: true });
 
         if (!hemero) {
             return res.status(404).json({
@@ -271,11 +270,11 @@ const editarPeriodicos = async (req, res) => {
         });
     }
 };
-const obtenerPeriodicosPorID = async (req, res) => {
+const obtenerTemasPorID = async (req, res) => {
     let hemeroID = req.params.id;
 
     try {
-        let hemero= await periodicos.findById(hemeroID);
+        let hemero= await temas.findById(hemeroID);
 
         if (!hemero) {
             return res.status(404).json({
@@ -295,11 +294,11 @@ const obtenerPeriodicosPorID = async (req, res) => {
         });
     }
 };
-const obtenerPeriodicoPorNombre = async (req, res) => {
+const obtenerTemaPorNombre = async (req, res) => {
     let nombreHemerografia = req.params.id;
 
     try {
-        let hemero = await periodicos.findOne({ nombre_periodico: nombreHemerografia });
+        let hemero = await temas.findOne({ nombre_tema: nombreHemerografia });
 
         if (!hemero) {
             return res.status(404).json({
@@ -320,11 +319,11 @@ const obtenerPeriodicoPorNombre = async (req, res) => {
     }
 };
 
-const listarPeriodicos = async (req, res) => {
+const listarTemas = async (req, res) => {
   try {
-    const Periodicos = await periodicos.find().sort({ nombre_periodico: 1 }); // Ordena alfabéticamente
+    const temas = await temas.find().sort({ nombre_tema: 1 }); // Ordena alfabéticamente
 
-    if (!Periodicos || Periodicos.length === 0) {
+    if (!temas || temas.length === 0) {
       return res.status(404).json({
         status: "error",
         message: "No se encontraron periódicos registrados"
@@ -333,8 +332,8 @@ const listarPeriodicos = async (req, res) => {
 
     return res.status(200).json({
       status: "success",
-      total: Periodicos.length,
-      Periodicos
+      total: temas.length,
+      temas
     });
 
   } catch (error) {
@@ -347,13 +346,13 @@ const listarPeriodicos = async (req, res) => {
   }
 };
 module.exports= {
-    pruebaPeriodicos,
-    registrarPeriodicos,
+    pruebaTemas,
+    registrarTemas,
     cargarFotografia,
-    editarPeriodicos,
-    borrarPeriodicos,
-    obtenerPeriodicosPorID,
-    obtenerPeriodicoPorNombre,
-    listarPeriodicos,
+    editarTemas,
+    borrarTemas,
+    obtenerTemasPorID,
+    obtenerTemaPorNombre,
+    listarTemas,
     editarFotografia
 }

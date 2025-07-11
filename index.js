@@ -62,11 +62,11 @@ const PartiturasRoutes = require("./routes/partiturasRuta");
 const ObjetosRoutes = require("./routes/objetosRuta");
 const MonumentosRoutes = require("./routes/monumentosRuta");
 const InstitucionesRoutes = require("./routes/institucionesRuta");
-const PeriodicosRoutes = require("./routes/periodicosRuta");
+const TemasRoutes = require("./routes/temasRuta");
 const VideoRoutes = require("./routes/videosRuta");
 
 // Rutas
-app.use("/api/periodicos", PeriodicosRoutes);
+app.use("/api/temas", TemasRoutes);
 app.use("/api/instituciones", InstitucionesRoutes);
 app.use("/api/documentacion", DocumentacionRoutes);
 app.use("/api/monumentos", MonumentosRoutes);

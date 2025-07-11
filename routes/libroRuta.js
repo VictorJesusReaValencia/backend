@@ -29,6 +29,8 @@ router.put('/actualizar-institucion/:institucionanterior/:institucionueva', Libr
 router.post('/registrar-pdf/:id', [subidas.array("pdfs", 10)], LibrosControlador.registrarPDF); // Permite hasta 10 archivos
 router.get('/search',LibrosControlador.getSugerencias)
 router.get('/listar-pendientes', LibrosControlador.listarPendientes);
+router.get("/buscar", LibrosControlador.buscarLibros);
+
 
 router.post('/editar-imagen/:id', [subidas.array("files", 10)], LibrosControlador.editarFotografia); // Permite hasta 10 archivos
 router.post('/editar-pdfs/:id', [subidas.array("pdfs", 10)], LibrosControlador.editarPDFs); // Permite hasta 10 archivos
